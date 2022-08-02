@@ -3,6 +3,7 @@ package fr.m2i.jdbc.utils;
 import fr.m2i.jdbc.models.ActorDto;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ public class MesRequetes {
             Connection connection = MaConnexion.getConnexion();
 
             Statement statement = connection.createStatement();
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from actor");
 
             ResultSet resultSet =  statement.executeQuery("select * from actor");
 
@@ -65,9 +67,13 @@ public class MesRequetes {
             Connection connection = MaConnexion.getConnexion();
 
             Statement statement = connection.createStatement();
-            System.out.println("ma requete : "+"select * from actor WHERE actor_id = "+id);
-            ResultSet resultSet =  statement.executeQuery("select * from actor WHERE actor_id = "+id);
 
+//            preparedStatement = connexion.prepareStatement("INSERT INTO actor(first_name, last_name) VALUES(?, ?);");
+            PreparedStatement preparedStatement = connection.prepareStatement("select * from actor WHERE actor_id = ? ");
+            preparedStatement.setInt(1,id);
+//            System.out.println("ma requete : "+"select * from actor WHERE actor_id = "+id)
+//            ResultSet resultSet =  statement.executeQuery("select * from actor WHERE actor_id = "+id);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
 
                 Calendar calendar = Calendar.getInstance();
@@ -86,6 +92,7 @@ public class MesRequetes {
 
         }catch(Exception e ){
             System.out.println("oups");
+            e.printStackTrace();
         }
 
 
