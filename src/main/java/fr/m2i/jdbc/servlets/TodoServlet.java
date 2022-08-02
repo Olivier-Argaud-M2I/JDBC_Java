@@ -53,12 +53,20 @@ public class TodoServlet extends HttpServlet {
                 }
                 break;
             case "nom":
-                todos.add(MesRequetesTodo.getTodoByName(nom));
+                todos = MesRequetesTodo.getTodoByName(nom);
                 break;
             case "create":
-                String nomTodo = request.getParameter("nom");
-                String descriptionTodo = request.getParameter("description");
-                todos.add(MesRequetesTodo.createTodo(new Todo(nomTodo,descriptionTodo)));
+                Todo todo = new Todo(request.getParameter("nom"),request.getParameter("description"));
+                if(id !=null){
+                    todo.setId(id);
+                    todos.add(MesRequetesTodo.updateTodo(todo));
+                }
+                else{
+                    todos.add(MesRequetesTodo.createTodo(todo));
+                }
+                break;
+            case "delete":
+                MesRequetesTodo.deleteTodo(MesRequetesTodo.getTodoById(id));
                 break;
         }
 

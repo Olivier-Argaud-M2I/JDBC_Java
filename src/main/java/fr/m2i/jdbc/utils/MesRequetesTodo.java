@@ -67,20 +67,23 @@ public class MesRequetesTodo {
         return todos;
     }
 
-    public static Todo getTodoByName(String name){
-        Todo todo = null;
+    public static List<Todo> getTodoByName(String name){
+        List<Todo> todos = new ArrayList<>();
         try{
 
             Connection connection = MaConnexionTodo.getConnexion();
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM todo WHERE name = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM todo WHERE nom = ?");
             preparedStatement.setString(1,name);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            todo = new Todo(
-                    resultSet.getInt("id"),
-                    resultSet.getString("nom"),
-                    resultSet.getString("description")
-            );
+            while(resultSet.next()){
+                Todo todo = new Todo(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nom"),
+                        resultSet.getString("description")
+                );
+                todos.add(todo);
+            }
 
             preparedStatement.close();
             MaConnexionTodo.closeConnection();
@@ -90,7 +93,7 @@ public class MesRequetesTodo {
             e.printStackTrace();
         }
 
-        return todo;
+        return todos;
     }
 
     public static Todo getTodoById(Integer id){
@@ -102,11 +105,14 @@ public class MesRequetesTodo {
             preparedStatement.setInt(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            todo = new Todo(
-                    resultSet.getInt("id"),
-                    resultSet.getString("nom"),
-                    resultSet.getString("description")
-            );
+            if(resultSet.next()){
+                todo = new Todo(
+                        resultSet.getInt("id"),
+                        resultSet.getString("nom"),
+                        resultSet.getString("description")
+                );
+            }
+
 
             preparedStatement.close();
             MaConnexionTodo.closeConnection();
@@ -123,14 +129,13 @@ public class MesRequetesTodo {
 
         try{
             Connection connection = MaConnexionTodo.getConnexion();
-            Statement statement = connection.createStatement();
             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE todo SET nom = ?,description = ? WHERE id = ?");
             preparedStatement.setString(1,todo.getNom());
             preparedStatement.setString(2,todo.getDescription());
             preparedStatement.setInt(3,todo.getId());
-            ResultSet resultSet = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
 
-            statement.close();
+            preparedStatement.close();
             MaConnexionTodo.closeConnection();
 
         }catch(Exception e ){
@@ -145,12 +150,10 @@ public class MesRequetesTodo {
     public static void deleteTodo(Todo todo){
         try{
             Connection connection = MaConnexionTodo.getConnexion();
-            Statement statement = connection.createStatement();
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM todo WHERE id = ?");
             preparedStatement.setInt(1,todo.getId());
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            statement.close();
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
             MaConnexionTodo.closeConnection();
 
         }catch(Exception e ){

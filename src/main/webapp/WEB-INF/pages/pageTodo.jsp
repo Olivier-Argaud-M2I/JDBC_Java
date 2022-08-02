@@ -9,17 +9,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-      <title>Actor</title>
+      <title>Todo</title>
   </head>
   <body>
 
 
   <fieldset>
-      <legend>Creation Todo</legend>
+      <legend>Creation/modification Todo</legend>
       <form action="/jdbc/todos?type=create" method="POST">
-          <input type="text" name="nom" placeholder="Nom">
-          <input type="text" name="description" placeholder="Description">
-          <input type="submit" value="Creer">
+          <input type="text" name="nom" id="nom" placeholder="Nom">
+          <input type="text" name="description" id="description" placeholder="Description">
+          <input type="number" name="id" id="id" hidden>
+          <input type="submit" value="Valider">
       </form>
   </fieldset>
 
@@ -53,9 +54,33 @@
         <legend>Resultats de la recherche</legend>
         <c:forEach items="${todos}" var="todo">
             <div>id:${todo.id}  nom:${todo.nom} description:${todo.description}</div>
+            <div>
+                <form action="/jdbc/todos?type=delete&id=${todo.id}" method="POST">
+                    <input type="submit" value="delete via form">
+                </form>
+
+                <button onclick="del(${todo.id})">Delete via fetch</button>
+
+                <button onclick="edit('${todo.id}','${todo.nom}','${todo.description}')">Edit</button>
+
+            </div>
         </c:forEach>
     </fieldset>
 
+    <script>
+        function del(id){
+            console.log("delete tache "+id);
+            fetch("/jdbc/todos?type=delete&id="+id,{method:"POST"})
+        }
+
+        function edit(id,nom,description){
+            console.log("edit tache "+id)
+            document.getElementById("id").value = id;
+            document.getElementById("nom").value = nom;
+            document.getElementById("description").value = description;
+        }
+
+    </script>
 
 
   </body>
