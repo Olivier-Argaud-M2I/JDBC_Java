@@ -16,11 +16,16 @@ public class MaConnexion {
     public static Connection getConnexion() throws SQLException {
 
         if(connection==null){
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             connection = DriverManager.getConnection(BDD,LOGIN,MDP);
         }
         return connection;
     }
 
+    public static void closeConnection() throws SQLException {
+        connection.close();
+        connection = null;
+
+    }
 
 }

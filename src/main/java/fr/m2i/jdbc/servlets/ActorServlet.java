@@ -28,18 +28,25 @@ public class ActorServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String type = request.getParameter("type");
-        String id = request.getParameter("id");
         String nom = request.getParameter("nom");
-        System.out.println("type : "+type);
-        System.out.println("id :"+id);
-        System.out.println("nom :" +nom);
+        Integer id = null;
+        try{
+            id = Integer.valueOf(request.getParameter("id"));
+        }catch(Exception e){
+            System.out.println("probleme de parse");
+        }
+//        System.out.println("type : "+type);
+//        System.out.println("id :"+id);
+//        System.out.println("nom :" +nom);
         List<ActorDto> actors = new ArrayList<>();
         switch (type){
             case "all":
                 actors = MesRequetes.getActors();
                 break;
             case "id":
-                actors = MesRequetes.getActorById(Integer.valueOf(id));
+                if (id !=null) {
+                    actors = MesRequetes.getActorById(id);
+                }
                 break;
             case "nom":
                 actors = MesRequetes.getActorByName(nom);

@@ -45,7 +45,8 @@ public class MesRequetes {
                 ));
 
             }
-
+            statement.close();
+            MaConnexion.closeConnection();
 
         }catch(Exception e ){
             System.out.println("oups");
@@ -80,7 +81,8 @@ public class MesRequetes {
                 ));
 
             }
-
+            statement.close();
+            MaConnexion.closeConnection();
 
         }catch(Exception e ){
             System.out.println("oups");
@@ -114,6 +116,9 @@ public class MesRequetes {
                 ));
 
             }
+
+            statement.close();
+            MaConnexion.closeConnection();
 
 
         }catch(Exception e ){
