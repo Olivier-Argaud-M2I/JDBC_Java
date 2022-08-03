@@ -21,9 +21,7 @@ public class TodoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String type = request.getParameter("type");
-
-        System.out.println(type);
+        request.setAttribute("todos",MesRequetesTodo.getTodos());
 
         this.getServletContext().getRequestDispatcher(PAGE).forward(request, response);
     }
@@ -73,6 +71,6 @@ public class TodoServlet extends HttpServlet {
         request.setAttribute("todos",todos);
 
 
-        this.getServletContext().getRequestDispatcher(PAGE).forward(request, response);
+        this.doGet(request, response);
     }
 }

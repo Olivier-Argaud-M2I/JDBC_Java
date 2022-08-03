@@ -12,5 +12,7 @@
         <a href="actors">Actors</a>
         <br/>
         <a href="todos">Todos</a>
+        <br/>
+        <a href="userLog">User Log</a>
     </body>
 </html>

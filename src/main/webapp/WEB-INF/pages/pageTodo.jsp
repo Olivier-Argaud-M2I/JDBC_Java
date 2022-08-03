@@ -19,6 +19,7 @@
       <form action="/jdbc/todos?type=create" method="POST">
           <input type="text" name="nom" id="nom" placeholder="Nom">
           <input type="text" name="description" id="description" placeholder="Description">
+<%--          <input type="datetime-local">--%>
           <input type="number" name="id" id="id" hidden>
           <input type="submit" value="Valider">
       </form>
@@ -58,6 +59,8 @@
                 <form action="/jdbc/todos?type=delete&id=${todo.id}" method="POST">
                     <input type="submit" value="delete via form">
                 </form>
+
+                <a href="<c:url value="/todos?type=delete&id=${todo.id}"/>" method="POST"></a>
 
                 <button onclick="del(${todo.id})">Delete via fetch</button>
 
