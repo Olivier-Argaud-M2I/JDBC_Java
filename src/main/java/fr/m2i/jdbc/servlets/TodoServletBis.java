@@ -48,7 +48,7 @@ public class TodoServletBis extends HttpServlet {
         try{
             id = Integer.valueOf(request.getParameter("id"));
         }catch(Exception e){
-            System.out.println("probleme de parse");
+            System.out.println("probleme de parse parametre id");
         }
 
         List<TodoBis> todos = new ArrayList<>();
@@ -76,6 +76,7 @@ public class TodoServletBis extends HttpServlet {
                 break;
             case "delete":
                 requetesTodoBis.deleteTodo(requetesTodoBis.getTodoById(id));
+                todos = requetesTodoBis.getTodos();
                 break;
         }
 

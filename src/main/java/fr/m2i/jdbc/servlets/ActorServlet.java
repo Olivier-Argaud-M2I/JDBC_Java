@@ -33,7 +33,7 @@ public class ActorServlet extends HttpServlet {
         try{
             id = Integer.valueOf(request.getParameter("id"));
         }catch(Exception e){
-            System.out.println("probleme de parse");
+            System.out.println("probleme de parse parametre id");
         }
 //        System.out.println("type : "+type);
 //        System.out.println("id :"+id);

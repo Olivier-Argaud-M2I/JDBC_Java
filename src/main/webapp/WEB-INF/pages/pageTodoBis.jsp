@@ -54,27 +54,23 @@
     <fieldset>
         <legend>Resultats de la recherche</legend>
         <c:forEach items="${todos}" var="todo">
-            <div>id:${todo.id}  nom:${todo.nom} description:${todo.description}</div>
-            <div>
-                <form action="<c:url value="todosBis?type=delete&id=${todo.id}"/>" method="POST">
-                    <input type="submit" value="delete via form">
-                </form>
+            <fieldset>
+                <div>id:${todo.id}  nom:${todo.nom} description:${todo.description}</div>
+                <div>
+                    <form action="<c:url value="todosBis?type=delete&id=${todo.id}"/>" method="POST">
+                        <input type="submit" value="delete">
+                    </form>
 
-                <a href="<c:url value="/todosBis?type=delete&id=${todo.id}"/>" method="POST"></a>
 
-                <button onclick="del(${todo.id})">Delete via fetch</button>
+                    <button onclick="edit('${todo.id}','${todo.nom}','${todo.description}')">Edit</button>
 
-                <button onclick="edit('${todo.id}','${todo.nom}','${todo.description}')">Edit</button>
-
-            </div>
+                </div>
+            </fieldset>
         </c:forEach>
     </fieldset>
 
     <script>
-        function del(id){
-            console.log("delete tache "+id);
-            fetch("/jdbc/todosBis?type=delete&id="+id,{method:"POST"})
-        }
+
 
         function edit(id,nom,description){
             console.log("edit tache "+id)

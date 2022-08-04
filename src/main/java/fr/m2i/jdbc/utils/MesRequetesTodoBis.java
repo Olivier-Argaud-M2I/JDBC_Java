@@ -24,22 +24,54 @@ public class MesRequetesTodoBis {
     public TodoBis createTodo(TodoBis todo){
         this.em = factory.createEntityManager();
         this.em.getTransaction().begin();
-        this.em.persist(todo);
-        this.em.getTransaction().commit();
+        boolean valid = false;
+        try{
+//            this.em.persist(todo);
+            this.em.createNativeQuery("INSERT INTO todobis(nom,description) VALUES (?,?)", TodoBis.class)
+                    .setParameter(1,todo.getNom())
+                    .setParameter(2,todo.getDescription()).executeUpdate();
+            valid = true;
+        }
+        finally {
+            if (valid){
+                this.em.getTransaction().commit();
+            }
+            else{
+                this.em.getTransaction().rollback();
+            }
+        }
+        em.refresh(todo);
         em.close();
         return todo;
     }
 
     public List<TodoBis> getTodos(){
+        List<TodoBis> todos = new ArrayList<>();
         this.em = factory.createEntityManager();
-        List<TodoBis> todos = (ArrayList<TodoBis>) em.createNativeQuery("SELECT * from todobis", TodoBis.class).getResultList();
+        this.em.getTransaction().begin();
+        boolean valid = false;
+        try{
+            todos = (ArrayList<TodoBis>) em.createNativeQuery("SELECT * from todobis", TodoBis.class).getResultList();
+            valid = true;
+        }
+        finally {
+            if (valid){
+                this.em.getTransaction().commit();
+            }
+            else{
+                this.em.getTransaction().rollback();
+            }
+        }
         em.close();
         return todos;
     }
 
     public List<TodoBis> getTodoByName(String name){
         this.em = factory.createEntityManager();
-        List<TodoBis> todos = (ArrayList<TodoBis>) em.createNativeQuery("SELECT * from todobis WHERE nom LIKE '%"+name+"%'", TodoBis.class).getResultList();
+        List<TodoBis> todos = (ArrayList<TodoBis>) em
+                .createNativeQuery("SELECT * from todobis WHERE nom LIKE ? ", TodoBis.class)
+                .setParameter(1,'%'+name+'%')
+                .getResultList();
         em.close();
         return todos;
     }
@@ -61,7 +93,7 @@ public class MesRequetesTodoBis {
 
     }
 
-    public  void deleteTodo(TodoBis todo){
+    public void deleteTodo(TodoBis todo){
         this.em = factory.createEntityManager();
         TodoBis todoBis = this.em.find(TodoBis.class,todo.getId());
         this.em.getTransaction().begin();
