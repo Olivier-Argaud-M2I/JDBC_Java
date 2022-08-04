@@ -31,14 +31,16 @@ public class MesRequetesTodoBis {
     }
 
     public List<TodoBis> getTodos(){
-        List<TodoBis> todos = new ArrayList<>();
-
+        this.em = factory.createEntityManager();
+        List<TodoBis> todos = (ArrayList<TodoBis>) em.createNativeQuery("SELECT * from todobis", TodoBis.class).getResultList();
+        em.close();
         return todos;
     }
 
     public List<TodoBis> getTodoByName(String name){
-        List<TodoBis> todos = new ArrayList<>();
-
+        this.em = factory.createEntityManager();
+        List<TodoBis> todos = (ArrayList<TodoBis>) em.createNativeQuery("SELECT * from todobis WHERE nom LIKE '%"+name+"%'", TodoBis.class).getResultList();
+        em.close();
         return todos;
     }
 
